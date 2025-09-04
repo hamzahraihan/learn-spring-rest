@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.learn.learn_spring_rest.entity.User;
 import com.learn.learn_spring_rest.model.RegisterUserRequest;
+import com.learn.learn_spring_rest.model.UserResponse;
 import com.learn.learn_spring_rest.repository.UserRepository;
 import com.learn.learn_spring_rest.security.BCrypt;
 
@@ -38,4 +39,9 @@ public class UserService {
 
     userRepository.save(user);
   }
+
+  public UserResponse get(User user) {
+    return UserResponse.builder().username(user.getUsername()).name(user.getName()).build();
+  }
+
 }
