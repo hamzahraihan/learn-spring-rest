@@ -21,5 +21,4 @@ public class WebConfiguration implements WebMvcConfigurer {
     WebMvcConfigurer.super.addArgumentResolvers(resolvers);
     resolvers.add(userArgumentResolver);
   }
-
 }
