@@ -3,15 +3,16 @@ package com.learn.learn_spring_rest.service;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.learn.learn_spring_rest.entity.Contact;
 import com.learn.learn_spring_rest.entity.User;
 import com.learn.learn_spring_rest.model.ContactResponse;
 import com.learn.learn_spring_rest.model.CreateContactRequest;
 import com.learn.learn_spring_rest.repository.ContactRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class ContactService {
@@ -36,6 +37,18 @@ public class ContactService {
 
     contactRepository.save(contact);
 
+    return toContactResponse(contact);
+  }
+
+  @Transactional(readOnly = true)
+  public ContactResponse get(User user, String id) {
+    Contact contact = contactRepository.findFirstByUserAndId(user, id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contact not found!"));
+
+    return toContactResponse(contact);
+  }
+
+  private ContactResponse toContactResponse(Contact contact) {
     return ContactResponse.builder()
         .id(contact.getId())
         .firstName(contact.getFirstName())
@@ -44,5 +57,4 @@ public class ContactService {
         .phone(contact.getPhone())
         .build();
   }
-
 }
