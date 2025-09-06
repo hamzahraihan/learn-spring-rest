@@ -5,6 +5,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.learn.learn_spring_rest.entity.User;
@@ -13,8 +14,6 @@ import com.learn.learn_spring_rest.model.UpdateUserRequest;
 import com.learn.learn_spring_rest.model.UserResponse;
 import com.learn.learn_spring_rest.repository.UserRepository;
 import com.learn.learn_spring_rest.security.BCrypt;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
