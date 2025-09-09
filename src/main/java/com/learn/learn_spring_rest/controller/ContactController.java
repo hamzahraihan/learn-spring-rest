@@ -74,7 +74,6 @@ public class ContactController {
         .build();
 
     Page<ContactResponse> contactResponse = contactService.search(user, request);
-    ;
 
     return WebResponse.<List<ContactResponse>>builder()
         .data(contactResponse.getContent())
