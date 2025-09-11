@@ -1,0 +1,51 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    environment:
+      - MYSQL_URL=jdbc:mysql://mysqldb:3306/springboot_rest_api
+      - MYSQL_USERNAME=springuser
+      - MYSQL_PASSWORD=root
+    networks:
+      - app-network
+
+  mysqldb:
+    image: mysql:8.0
+    restart: unless-stopped
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=springboot_rest_api
+      - MYSQL_USER=springuser
+      - MYSQL_PASSWORD=root
+    command: --default-authentication-plugin=mysql_native_password --bind-address=0.0.0.0
+    networks:
+      - app-network
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-uroot', '-proot']
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge
