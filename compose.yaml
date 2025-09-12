@@ -14,38 +14,40 @@ services:
     ports:
       - 8080:8080
     restart: unless-stopped
-    depends_on:
-      mysqldb:
-        condition: service_healthy
+    # depends_on:
+    #   mysqldb:
+    #     condition: service_healthy
     environment:
-      - MYSQL_URL=jdbc:mysql://mysqldb:3306/springboot_rest_api
-      - MYSQL_USERNAME=springuser
-      - MYSQL_PASSWORD=root
-    networks:
-      - app-network
+      # - MYSQL_URL=jdbc:mysql://mysqldb:3306/springboot_rest_api
+      # - MYSQL_USERNAME=springuser
+      # - MYSQL_PASSWORD=root
+      - SUPABASE_USERNAME=postgres.yqyqwbxuvkfadcoakeoc
+      - SUPABASE_PASSWORD=postgresql123
+      - SUPABASE_URL=jdbc:postgresql://aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres
+    # networks:
+    #   - app-network
+#   mysqldb:
+#     image: mysql:8.0
+#     restart: unless-stopped
+#     volumes:
+#       - db-data:/var/lib/mysql
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=root
+#       - MYSQL_DATABASE=springboot_rest_api
+#       - MYSQL_USER=springuser
+#       - MYSQL_PASSWORD=root
+#     command: --default-authentication-plugin=mysql_native_password --bind-address=0.0.0.0
+#     networks:
+#       - app-network
+#     healthcheck:
+#       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-uroot', '-proot']
+#       interval: 30s
+#       timeout: 10s
+#       retries: 10
+#       start_period: 30s
+# volumes:
+#   db-data:
 
-  mysqldb:
-    image: mysql:8.0
-    restart: unless-stopped
-    volumes:
-      - db-data:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=springboot_rest_api
-      - MYSQL_USER=springuser
-      - MYSQL_PASSWORD=root
-    command: --default-authentication-plugin=mysql_native_password --bind-address=0.0.0.0
-    networks:
-      - app-network
-    healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-uroot', '-proot']
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 30s
-volumes:
-  db-data:
-
-networks:
-  app-network:
-    driver: bridge
+# networks:
+#   app-network:
+#     driver: bridge
